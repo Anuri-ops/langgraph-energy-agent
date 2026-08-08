@@ -1,0 +1,4 @@
+SAFETY BULLETIN 2026-04
+All personnel entering a turbine nacelle must confirm the rotor is locked and the turbine is in maintenance mode. Never enter a nacelle when gearbox oil temperature exceeds 60 degrees Celsius.
+For solar sites, work on DC circuits is prohibited during peak irradiance hours (11:00 to 15:00) unless the string is fully isolated and verified with a voltage tester.
+Report all near-miss incidents within 24 hours to the site HSE lead.

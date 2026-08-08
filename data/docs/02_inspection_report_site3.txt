@@ -1,0 +1,6 @@
+INSPECTION REPORT - SITE 3 (SOLAR ARRAY)
+Date: 2026-07-14
+Inspector: Field Team B
+Findings: Panel string 3B showed a 12 percent drop in output compared to adjacent strings. Root cause identified as soiling and partial shading from vegetation growth on the southern boundary.
+Recommendation: Schedule panel cleaning and vegetation trimming. Expected recovery of output to within 2 percent of baseline after remediation.
+Inverter 3B-INV02 logged three overtemperature warnings during peak irradiance hours.

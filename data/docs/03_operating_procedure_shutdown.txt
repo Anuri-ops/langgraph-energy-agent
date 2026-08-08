@@ -1,0 +1,4 @@
+STANDARD OPERATING PROCEDURE - EMERGENCY SHUTDOWN
+This procedure applies to all wind and solar assets.
+Trigger conditions for emergency shutdown: wind speed exceeding 25 m/s sustained for 10 minutes, gearbox oil temperature above 80 degrees Celsius, or detection of smoke or fire.
+Shutdown sequence: 1) Activate remote stop from SCADA. 2) Confirm blade pitch to feather position for wind assets. 3) Isolate electrical connection at the combiner box. 4) Log the event and notify the control room supervisor.

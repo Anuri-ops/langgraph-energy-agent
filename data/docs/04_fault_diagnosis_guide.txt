@@ -1,0 +1,5 @@
+FAULT DIAGNOSIS GUIDE - COMMON PERFORMANCE ISSUES
+Sudden output drop of more than 10 percent: check for soiling, shading, inverter faults, or grid curtailment.
+Gradual output decline over weeks: likely panel degradation, module soiling accumulation, or gearbox wear in wind assets.
+Intermittent output: often caused by loose DC connections, faulty sensors, or communication dropouts between SCADA and the asset.
+Zero output from a single asset while neighbours operate normally: check the inverter status and the combiner box fuses first.

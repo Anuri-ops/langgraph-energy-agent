@@ -1,0 +1,5 @@
+WIND TURBINE MAINTENANCE MANUAL - MODEL WT-2000
+Section 3: Gearbox Maintenance
+Routine gearbox inspection must be performed every 6 months. The gearbox oil temperature should not exceed 75 degrees Celsius during normal operation. If oil temperature rises above 80 degrees Celsius, the turbine must be shut down immediately to prevent bearing damage.
+Oil should be replaced every 18 months or 12,000 operating hours, whichever comes first. Use only ISO VG 320 synthetic gear oil.
+Vibration levels above 4.5 mm/s indicate potential bearing wear and require inspection within 48 hours.

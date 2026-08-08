@@ -1,0 +1,3 @@
+GRID CURTAILMENT NOTE
+When the grid operator issues a curtailment instruction, affected assets will show reduced output that is NOT a fault. Curtailment events are logged with a status flag of CURTAILED in the operational database.
+Do not dispatch a field team for output drops that coincide with a logged curtailment event. Verify the status flag before raising a maintenance ticket.
