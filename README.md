@@ -2,6 +2,9 @@
 
 **🔗 Live demo:** https://anurilanggraph-energy-agent.streamlit.app/
 
+## Demo
+![The agent answering a combined question, choosing both tools](demo.png)
+
 
 An **agentic** AI assistant for energy operations, built with **LangGraph**. Unlike a hand-coded
 router, here an LLM agent decides on its own which tools to call — and for a combined question it
