@@ -1,0 +1,510 @@
+[
+  {
+    "id": "rag_01",
+    "category": "rag",
+    "question": "At what gearbox oil temperature must a turbine be shut down?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "80"
+      ],
+      [
+        "shut down",
+        "shutdown"
+      ]
+    ],
+    "expected_sources": [
+      "01_turbine_maintenance_manual.txt",
+      "03_operating_procedure_shutdown.txt"
+    ]
+  },
+  {
+    "id": "rag_02",
+    "category": "rag",
+    "question": "How often should the gearbox receive a routine inspection?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "6 months",
+        "six months"
+      ]
+    ],
+    "expected_sources": [
+      "01_turbine_maintenance_manual.txt"
+    ]
+  },
+  {
+    "id": "rag_03",
+    "category": "rag",
+    "question": "When should gearbox oil be replaced?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "18 months"
+      ],
+      [
+        "12,000",
+        "12000"
+      ]
+    ],
+    "expected_sources": [
+      "01_turbine_maintenance_manual.txt"
+    ]
+  },
+  {
+    "id": "rag_04",
+    "category": "rag",
+    "question": "What vibration level indicates potential bearing wear, and how soon should it be inspected?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "4.5"
+      ],
+      [
+        "48 hours",
+        "48-hour"
+      ]
+    ],
+    "expected_sources": [
+      "01_turbine_maintenance_manual.txt"
+    ]
+  },
+  {
+    "id": "rag_05",
+    "category": "rag",
+    "question": "Can personnel enter a turbine nacelle when gearbox oil temperature is above 60 C?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "60"
+      ],
+      [
+        "never",
+        "must not",
+        "prohibited",
+        "do not"
+      ]
+    ],
+    "expected_sources": [
+      "05_safety_bulletin.txt"
+    ]
+  },
+  {
+    "id": "rag_06",
+    "category": "rag",
+    "question": "What are the restrictions for solar DC circuit work during peak irradiance hours?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "11:00",
+        "11:00 to 15:00",
+        "15:00"
+      ],
+      [
+        "isolated"
+      ],
+      [
+        "voltage tester"
+      ]
+    ],
+    "expected_sources": [
+      "05_safety_bulletin.txt"
+    ]
+  },
+  {
+    "id": "rag_07",
+    "category": "rag",
+    "question": "How quickly must a near-miss incident be reported, and to whom?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "24 hours",
+        "24-hour"
+      ],
+      [
+        "HSE"
+      ]
+    ],
+    "expected_sources": [
+      "05_safety_bulletin.txt"
+    ]
+  },
+  {
+    "id": "rag_08",
+    "category": "rag",
+    "question": "What remediation was recommended after the Site 3 inspection?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "cleaning"
+      ],
+      [
+        "vegetation",
+        "trimming"
+      ]
+    ],
+    "expected_sources": [
+      "02_inspection_report_site3.txt"
+    ]
+  },
+  {
+    "id": "rag_09",
+    "category": "rag",
+    "question": "What are common causes of intermittent output?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "loose DC",
+        "loose"
+      ],
+      [
+        "sensor"
+      ],
+      [
+        "communication",
+        "SCADA"
+      ]
+    ],
+    "expected_sources": [
+      "04_fault_diagnosis_guide.txt"
+    ]
+  },
+  {
+    "id": "rag_10",
+    "category": "rag",
+    "question": "Should a field team be dispatched for an output drop during a logged curtailment event?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "do not",
+        "don't",
+        "no"
+      ],
+      [
+        "CURTAILED",
+        "curtailment"
+      ]
+    ],
+    "expected_sources": [
+      "06_grid_curtailment_note.txt"
+    ]
+  },
+  {
+    "id": "rag_11",
+    "category": "refusal",
+    "question": "What is the battery-room humidity limit in these procedures?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "refusal_expected": true,
+    "forbid_patterns": [
+      "\\b\\d+(?:\\.\\d+)?\\s*%"
+    ]
+  },
+  {
+    "id": "sql_01",
+    "category": "sql",
+    "question": "How many records have a FAULT status?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "11"
+      ]
+    ]
+  },
+  {
+    "id": "sql_02",
+    "category": "sql",
+    "question": "Which assets were in FAULT on 2026-07-16?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "Site2_Wind"
+      ],
+      [
+        "Site4_Solar"
+      ]
+    ]
+  },
+  {
+    "id": "sql_03",
+    "category": "sql",
+    "question": "Which record has the highest power output, and what is the value?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "Site1_Wind"
+      ],
+      [
+        "1974"
+      ]
+    ]
+  },
+  {
+    "id": "sql_04",
+    "category": "sql",
+    "question": "Which record has the lowest power output, and what is the value?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "Site4_Solar"
+      ],
+      [
+        "207"
+      ]
+    ]
+  },
+  {
+    "id": "sql_05",
+    "category": "sql",
+    "question": "What is the average power output for Site3_Solar?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "995.9",
+        "995.90",
+        "996"
+      ]
+    ]
+  },
+  {
+    "id": "sql_06",
+    "category": "sql",
+    "question": "How many records have anomaly_flag equal to 1?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "18"
+      ]
+    ]
+  },
+  {
+    "id": "sql_07",
+    "category": "sql",
+    "question": "Which asset was CURTAILED on 2026-07-14 and what was its power output?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "Site2_Wind"
+      ],
+      [
+        "697"
+      ]
+    ]
+  },
+  {
+    "id": "sql_08",
+    "category": "sql",
+    "question": "How many records have NORMAL status?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "required_groups": [
+      [
+        "83"
+      ]
+    ]
+  },
+  {
+    "id": "combo_01",
+    "category": "combined",
+    "question": "On which dates was Site3_Solar in FAULT, and what does the fault diagnosis guide say to check for a sudden output drop over 10 percent?",
+    "expected_tools": [
+      "query_operational_data",
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "2026-07-02",
+        "July 2"
+      ],
+      [
+        "2026-07-08",
+        "July 8"
+      ],
+      [
+        "2026-07-13",
+        "July 13"
+      ]
+    ],
+    "expected_sources": [
+      "04_fault_diagnosis_guide.txt"
+    ],
+    "optional_groups": [
+      [
+        "soiling"
+      ],
+      [
+        "shading"
+      ],
+      [
+        "inverter"
+      ],
+      [
+        "curtailment"
+      ]
+    ],
+    "min_optional_matches": 3
+  },
+  {
+    "id": "combo_02",
+    "category": "combined",
+    "question": "Which assets were CURTAILED on 2026-07-02, and should a field team be dispatched for those output drops?",
+    "expected_tools": [
+      "query_operational_data",
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "Site1_Wind"
+      ],
+      [
+        "Site4_Solar"
+      ],
+      [
+        "do not",
+        "don't",
+        "no"
+      ]
+    ],
+    "expected_sources": [
+      "06_grid_curtailment_note.txt"
+    ]
+  },
+  {
+    "id": "combo_03",
+    "category": "combined",
+    "question": "Which assets had anomaly_flag 1 on 2026-07-17, and what are common causes of intermittent output?",
+    "expected_tools": [
+      "query_operational_data",
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "Site2_Wind"
+      ],
+      [
+        "Site3_Solar"
+      ],
+      [
+        "loose"
+      ],
+      [
+        "sensor"
+      ],
+      [
+        "communication",
+        "SCADA"
+      ]
+    ],
+    "expected_sources": [
+      "04_fault_diagnosis_guide.txt"
+    ]
+  },
+  {
+    "id": "combo_04",
+    "category": "combined",
+    "question": "What was Site3_Solar power output on 2026-07-14, and what did the Site 3 inspection recommend?",
+    "expected_tools": [
+      "query_operational_data",
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "1214"
+      ],
+      [
+        "cleaning"
+      ],
+      [
+        "vegetation",
+        "trimming"
+      ]
+    ],
+    "expected_sources": [
+      "02_inspection_report_site3.txt"
+    ]
+  },
+  {
+    "id": "combo_05",
+    "category": "combined",
+    "question": "Which asset was in FAULT on 2026-07-11, and after an emergency shutdown what final logging/notification step is required?",
+    "expected_tools": [
+      "query_operational_data",
+      "search_documents"
+    ],
+    "required_groups": [
+      [
+        "Site2_Wind"
+      ],
+      [
+        "log"
+      ],
+      [
+        "control room supervisor",
+        "supervisor"
+      ]
+    ],
+    "expected_sources": [
+      "03_operating_procedure_shutdown.txt"
+    ]
+  },
+  {
+    "id": "refusal_02",
+    "category": "refusal",
+    "question": "What was the average power output in August 2026?",
+    "expected_tools": [
+      "query_operational_data"
+    ],
+    "refusal_expected": true,
+    "forbid_patterns": [
+      "\\b\\d+(?:\\.\\d+)?\\s*kW\\b"
+    ]
+  },
+  {
+    "id": "refusal_03",
+    "category": "refusal",
+    "question": "What is the maximum permitted blade tip speed for the WT-2000?",
+    "expected_tools": [
+      "search_documents"
+    ],
+    "refusal_expected": true,
+    "forbid_patterns": [
+      "\\b\\d+(?:\\.\\d+)?\\s*m/s\\b"
+    ]
+  }
+]

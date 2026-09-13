@@ -53,7 +53,8 @@ with st.spinner("Preparing knowledge base..."):
     ensure_index()
 
 # Import the agent after the index is ready
-from agent import agent
+from agent import run_agent
+from observability import log_event
 
 if "question_count" not in st.session_state:
     st.session_state.question_count = 0
@@ -70,21 +71,51 @@ st.caption(f"Demo limit: {remaining} question(s) remaining this session.")
 
 question = st.text_input("Your question:")
 
+if "last_question" not in st.session_state:
+    st.session_state.last_question = None
+if "last_run" not in st.session_state:
+    st.session_state.last_run = None
+if "feedback_sent" not in st.session_state:
+    st.session_state.feedback_sent = set()
+
 if question:
-    if st.session_state.question_count >= MAX_QUESTIONS_PER_SESSION:
-        st.warning("You've reached the demo question limit for this session. "
-                   "This protects the demo from overuse. Thanks for trying it!")
-    else:
-        with st.spinner("Agent reasoning (may call one or more tools)..."):
-            result = agent.invoke({"messages": [("user", question)]})
-            answer = result["messages"][-1].content
-            # show which tools the agent chose, for transparency
-            tools_used = [m.name for m in result["messages"] if getattr(m, "name", None)]
-        st.session_state.question_count += 1
+    is_new_question = question != st.session_state.last_question
+    if is_new_question:
+        if st.session_state.question_count >= MAX_QUESTIONS_PER_SESSION:
+            st.warning("You've reached the demo question limit for this session. "
+                       "This protects the demo from overuse. Thanks for trying it!")
+            st.session_state.last_run = None
+        else:
+            with st.spinner("Agent reasoning (may call one or more tools)..."):
+                st.session_state.last_run = run_agent(question)
+            st.session_state.last_question = question
+            st.session_state.question_count += 1
+
+    run = st.session_state.last_run
+    if run is not None and st.session_state.last_question == question:
+        answer = run["answer"]
+        tools_used = run["tools_used"]
+        trace_id = run["trace_id"]
         st.markdown("### Answer")
         st.write(answer)
         if tools_used:
             st.caption("Tools the agent chose: " + ", ".join(dict.fromkeys(tools_used)))
+        st.caption(f"Trace ID: {trace_id}")
+
+        if trace_id not in st.session_state.feedback_sent:
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button("👍 Helpful", key=f"helpful_{trace_id}"):
+                    log_event("user_feedback", {"rating": "helpful"}, trace_id)
+                    st.session_state.feedback_sent.add(trace_id)
+                    st.success("Feedback recorded.")
+            with c2:
+                if st.button("👎 Needs work", key=f"needs_work_{trace_id}"):
+                    log_event("user_feedback", {"rating": "needs_work"}, trace_id)
+                    st.session_state.feedback_sent.add(trace_id)
+                    st.info("Feedback recorded.")
+        else:
+            st.caption("Feedback recorded for this response.")
 
 st.divider()
 st.caption(
