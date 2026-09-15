@@ -20,7 +20,7 @@ The agent has two tools and chooses between them per question:
 - **query_operational_data** — natural-language-to-SQL over an operational data table (counts, statuses, anomalies; read-only queries).
 
 For a combined question ("which assets faulted, and what should I do about it?"), the agent
-**decomposes it itself**, calls both tools, and merges the results — no hand-written routing.
+decomposes it itself, calls both tools, and merges the results — no hand-written routing.
 
 ## Architecture (LangGraph)
 - **State** — the message history that flows through the graph.
@@ -51,7 +51,7 @@ python agent.py                # run the agent on sample questions
 ```
 
 ## Data
-All data is **synthetic** and created for demonstration — no proprietary content.
+All data is synthetic and created for demonstration — no proprietary content.
 
 ## Notes
 Built independently to demonstrate agentic AI fundamentals — tools, the ReAct loop, and
@@ -59,7 +59,7 @@ LLM-driven tool orchestration — using LangGraph.
 
 ## Evaluation & traceability
 
-The repo includes a **26-case deterministic regression benchmark** in `evaluation/` covering:
+The repo includes a 26-case deterministic regression benchmark in `evaluation/` covering:
 
 - document/RAG questions,
 - SQL/structured-data questions,
@@ -81,7 +81,7 @@ The first valid benchmark run scored **23/26**. Failure analysis found:
 - and one literal asset-name matching false negative.
 
 After adding a general routing/refusal policy to the agent and correcting the two evaluator
-measurement issues, the **same 26 benchmark cases** were rerun and scored **26/26**.
+measurement issues, the same 26 benchmark cases were rerun and scored 26/26.
 
 The anti-fabrication pattern guards were not weakened between the baseline and final run.
 
