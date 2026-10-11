@@ -49,6 +49,59 @@ def load_cases():
     return json.loads(CASES_PATH.read_text(encoding="utf-8"))
 
 
+def validate_cases(cases):
+    """Fail fast on malformed evaluation definitions before any paid LLM work."""
+    tools = {"search_documents", "query_operational_data"}
+    categories = {"rag", "sql", "combined", "refusal"}
+    if not isinstance(cases, list) or not cases:
+        raise ValueError("Evaluation suite must contain a nonempty list")
+    seen = set()
+    for case in cases:
+        if not isinstance(case, dict):
+            raise ValueError("Each evaluation case must be an object")
+        case_id = case.get("id")
+        if not isinstance(case_id, str) or not case_id.strip():
+            raise ValueError("Missing or empty evaluation case ID")
+        if case_id in seen:
+            raise ValueError(f"Duplicate evaluation case ID: {case_id}")
+        seen.add(case_id)
+        if not isinstance(case.get("question"), str) or not case["question"].strip():
+            raise ValueError(f"Missing question for case {case_id}")
+        if case.get("category") not in categories:
+            raise ValueError(f"Unknown category in case {case_id}")
+        expected = case.get("expected_tools")
+        if (not isinstance(expected, list) or
+                any(not isinstance(tool, str) for tool in expected) or
+                len(expected) != len(set(expected)) or not set(expected) <= tools):
+            raise ValueError(f"Invalid expected_tools in case {case_id}")
+        for group_key in ("required_groups", "optional_groups"):
+            groups = case.get(group_key, [])
+            if not isinstance(groups, list) or any(
+                not isinstance(group, list) or not group or
+                any(not isinstance(term, str) or not term.strip() for term in group)
+                for group in groups
+            ):
+                raise ValueError(f"Invalid {group_key} in case {case_id}")
+        options = case.get("optional_groups", [])
+        threshold = case.get("min_optional_matches", 0)
+        if not isinstance(threshold, int) or isinstance(threshold, bool) or not 0 <= threshold <= len(options):
+            raise ValueError(f"Invalid optional threshold in case {case_id}")
+        sources = case.get("expected_sources", [])
+        if not isinstance(sources, list) or any(
+            not isinstance(source, str) or not source.strip() for source in sources
+        ):
+            raise ValueError(f"Invalid sources in case {case_id}")
+        patterns = case.get("forbid_patterns", [])
+        if not isinstance(patterns, list) or any(not isinstance(pattern, str) for pattern in patterns):
+            raise ValueError(f"Invalid refusal patterns in case {case_id}")
+        for pattern in patterns:
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                raise ValueError(f"Invalid regex in case {case_id}") from exc
+    return len(cases)
+
+
 def normalize_text(text):
     """Normalize superficial formatting differences for deterministic matching."""
     text = str(text).lower().replace("_", " ").replace("-", " ")
@@ -227,12 +280,10 @@ def main():
     args = parser.parse_args()
     cases = load_cases()
 
-    ids = [c["id"] for c in cases]
-    if len(ids) != len(set(ids)):
-        raise SystemExit("Duplicate evaluation case IDs found")
-    for c in cases:
-        if not c.get("question") or "expected_tools" not in c:
-            raise SystemExit(f"Invalid case: {c}")
+    try:
+        validate_cases(cases)
+    except ValueError as exc:
+        raise SystemExit(f"Invalid evaluation suite: {exc}") from exc
 
     print(f"Validated {len(cases)} evaluation cases.")
     if args.dry_run:
