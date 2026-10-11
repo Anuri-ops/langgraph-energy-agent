@@ -1,0 +1,32 @@
+# Credentials (including accidentally copied backups); KEEP .env.example only.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Private indexes, recordings, evaluations and local state.
+chroma_db/
+**/chroma_db/
+traces/
+**/traces/
+evaluation/results/
+**/evaluation/results/
+.git/
+.github/
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+*.pyc
+*.zip
+*.log
+.DS_Store
+tests/

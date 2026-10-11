@@ -80,16 +80,18 @@ After the baseline evaluation, a general system policy was added to make the rou
 - missing values should not be invented or inferred.
 
 ### Observability
-The project records structured JSONL trace events for observable execution behaviour, including:
+The project originally recorded structured JSONL events for observable execution behaviour, including:
 
 - run start and completion,
 - tool requests and tool usage,
 - retrieved document sources,
-- generated structured queries,
-- result previews,
-- errors,
-- final answers,
+- generated-query events,
+- result row counts,
+- error types,
+- completed-run metadata,
 - and latency.
+
+**Step 5 update (11 October 2026):** Telemetry now uses an explicit allowlist and does **not** persist raw questions, model answers, generated SQL, result previews, tool arguments, or error messages. Content-hash prompt versions, provider-reported token usage (when available), model-call events, latency and run-level summaries are logged. The 26/26 score above is the earlier historical benchmark, **not** a fresh Step 5 live rerun.
 
 The tracing layer does **not** record hidden chain-of-thought.
 
