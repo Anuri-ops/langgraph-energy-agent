@@ -1,29 +1,9 @@
-## Step 6 — Docker, CI and Azure deployment preparation (2026-10-11)
+# Verified engineering milestones — 11 October 2026
 
-This version keeps the existing Streamlit UI and FastAPI API, and adds a **Dockerfile**, Docker Compose, GitHub Actions CI (offline tests and image build only), and a documented optional Azure Container Apps route. **Docker and Azure have not yet been run in this build environment.** See `STEP6_CHANGELOG.md` and `docs/azure-container-apps.md`.
-
-**Windows with Docker Desktop (run from the inner `langgraph-energy-agent` folder):**
-
-1. Copy your PRIVATE `.env` from the verified Step 5 version, with rotated `ENERGY_AGENT_API_KEY`, into this new project folder. Never upload or commit it. This container does **not** use your copied Windows `chroma_db`; it creates a fresh named Docker volume.
-2. `docker compose version` — confirm Docker Desktop + Compose are installed and running.
-3. `docker compose build` — build the image without supplying secrets at build time.
-4. `docker compose run --rm ingest` — **once**, to embed the six synthetic documents into the named Chroma volume. This uses your OpenAI API credentials and may cost a small amount.
-5. `docker compose up -d api` — run the API on `127.0.0.1:8000` only.
-6. Open `http://127.0.0.1:8000/docs`, test `GET /health` (200) and an authenticated `POST /ask` with your private key (200). An invalid key should return 401. Never share a Swagger screenshot containing the key.
-7. `docker compose logs --tail=50 api` shows server logs; `docker compose down` stops containers **without deleting the indexed named volumes**. Do not run `docker compose down -v` unless you intentionally want to destroy the local Chroma index and logs.
-
-**Offline Python CI-equivalent check:**
-
-```cmd
-python -m pip install -r requirements-dev.txt
-python -m pytest -q
-python evaluation/run_eval.py --dry-run
-python scripts/check_tracked_files.py
-```
-
-**GitHub:** push the clean project into your own repository (never `.env`/`chroma_db`/`traces`). `.github/workflows/ci.yml` automatically runs on pushes and pull requests and checks the Docker image build. Do not claim CI ran successfully until the GitHub Actions checks are green. No Azure deploy is triggered.
-
-**Azure:** only a **documented optional staging procedure**, not a deployed live endpoint. See `docs/azure-container-apps.md` for secrets, startup index initialization, storage caveats, exposure risks and costs.
+- **Live synthetic benchmark:** 26/26 end-to-end passes and 26/26 correct tool routes; 15/15 applicable source-grounding checks, 3/3 unsupported-question refusals; median latency 4.61 s (one 26-case run).
+- **Automated tests:** 165 local tests passed; GitHub Actions Python test and Docker image-build jobs passed on branch push and pull request.
+- **Deployment:** FastAPI Docker service built and tested locally; original Streamlit application retained. Azure CLI authentication was checked, **but the application is not deployed to Azure**.
+- **Limitations:** synthetic regression tests only; no claim of production safety or universal accuracy. See [the detailed live evaluation report](docs/live_evaluation_2026-10-11.md).
 
 ---
 
@@ -49,7 +29,7 @@ The agent has two tools and chooses between them per question:
 - **query_operational_data** — natural-language-to-SQL over an operational data table (counts, statuses, anomalies; read-only queries).
 
 For a combined question ("which assets faulted, and what should I do about it?"), the agent
-decomposes it itself, calls both tools, and merges the results — no hand-written routing.
+**decomposes it itself**, calls both tools, and merges the results — no hand-written routing.
 
 ## Architecture (LangGraph)
 - **State** — the message history that flows through the graph.
@@ -279,7 +259,7 @@ reliability, a complete prompt-injection defence, or production readiness.
 Persistent API rate limiting and cloud deployment remain for later steps.
 
 ## Data
-All data is synthetic and created for demonstration — no proprietary content.
+All data is **synthetic** and created for demonstration — no proprietary content.
 
 ## Notes
 Built independently to demonstrate agentic AI fundamentals — tools, the ReAct loop, and
@@ -287,7 +267,7 @@ LLM-driven tool orchestration — using LangGraph.
 
 ## Evaluation & traceability
 
-The repo includes a 26-case deterministic regression benchmark in `evaluation/` covering:
+The repo includes a **26-case deterministic regression benchmark** in `evaluation/` covering:
 
 - document/RAG questions,
 - SQL/structured-data questions,
@@ -309,7 +289,7 @@ The first valid benchmark run scored **23/26**. Failure analysis found:
 - and one literal asset-name matching false negative.
 
 After adding a general routing/refusal policy to the agent and correcting the two evaluator
-measurement issues, the same 26 benchmark cases were rerun and scored 26/26.
+measurement issues, the **same 26 benchmark cases** were rerun and scored **26/26**.
 
 The anti-fabrication pattern guards were not weakened between the baseline and final run.
 
